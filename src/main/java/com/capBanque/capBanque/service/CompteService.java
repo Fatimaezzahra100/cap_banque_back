@@ -9,12 +9,16 @@ import org.springframework.stereotype.Service;
 
 import java.nio.file.attribute.UserPrincipalNotFoundException;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class CompteService {
-
     @Autowired
     private CompteRepository compteRepository;
+
+    public CompteService(CompteRepository compteRepository) {
+        this.compteRepository = compteRepository;
+    }
 
     public Compte consultAccount(Long id){
         return compteRepository.findById(id).orElseThrow(()-> new UserNotFoundException(
@@ -29,13 +33,13 @@ public class CompteService {
         return compteRepository.findAll();
     }
 
-    public Compte updateCompte(Compte compte, Long id){
-        Compte compteToUpdate = consultAccount(id);
-        compteToUpdate.setBalance(compte.getBalance());
-        compteToUpdate.setAccountNumber(compte.getAccountNumber());
-        return compteToUpdate;
+    public Compte updateCompte(Compte compte){
+        return compteRepository.save(compte);
     }
 
+    public Compte saveCompte (Compte compte){
+       return compteRepository.save(compte);
+    }
 
 
 }

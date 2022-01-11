@@ -11,7 +11,7 @@ import javax.persistence.Entity;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@DiscriminatorValue("CE")
+//@DiscriminatorValue("CE")
 public class CompteEpargne extends Compte{
     private Double rate;
 

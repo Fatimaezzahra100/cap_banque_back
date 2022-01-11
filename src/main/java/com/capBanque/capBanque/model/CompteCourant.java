@@ -10,14 +10,13 @@ import java.util.Date;
 
 @Entity
 @Data @AllArgsConstructor @NoArgsConstructor
-@DiscriminatorValue("CC")
+//@DiscriminatorValue("CC")
 public class CompteCourant extends Compte{
     private Double overdraft;
 
     public CompteCourant(User user) {
-        super(user);
+        super();
         this.setBalance(500.0);
-
     }
 
 
