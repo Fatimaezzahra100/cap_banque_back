@@ -1,5 +1,6 @@
 package com.capBanque.capBanque.service;
 
+import com.capBanque.capBanque.exeption.UserNotFoundException;
 import com.capBanque.capBanque.model.Operation;
 import com.capBanque.capBanque.model.OperationExterne;
 import com.capBanque.capBanque.model.OperationInterne;
@@ -33,7 +34,8 @@ public class OperationService {
     }
 
     public Operation getOperation(Long id){
-        return operationRepository.getById(id);
+        return operationRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
+                "Operation by id" + id + "was not found"));
     }
 
 }
