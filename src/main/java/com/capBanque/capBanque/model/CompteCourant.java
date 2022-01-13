@@ -15,8 +15,14 @@ public class CompteCourant extends Compte{
     private Double overdraft;
 
     public CompteCourant(User user) {
-        super();
+        super(user);
         this.setBalance(500.0);
+    }
+
+    public CompteCourant (Long compteId, Long accountNumber, Double balance, User user, Date creationDate ) {
+        super(compteId,user,accountNumber,balance);
+        this.setBalance(500.0);
+
     }
 
 

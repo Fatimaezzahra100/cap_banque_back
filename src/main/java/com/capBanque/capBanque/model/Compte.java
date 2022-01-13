@@ -1,8 +1,10 @@
 package com.capBanque.capBanque.model;
 
+import com.capBanque.capBanque.repository.UserRepository;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -12,6 +14,8 @@ import java.util.Date;
 @Data @AllArgsConstructor @NoArgsConstructor
 @DiscriminatorColumn(name= "TYPE_CPT", discriminatorType = DiscriminatorType.STRING, length = 50)
 public abstract class Compte implements Serializable {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long compteId;
@@ -22,7 +26,27 @@ public abstract class Compte implements Serializable {
     private Double balance;
     private Date creationDate;
 
-    public Compte(Long compteId, Long accountNumber, Double balance, User user, Date creationDate ) {
+    public Compte(User user, Long accountNumber, Double balance) {
+        this.user = user;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.creationDate = new Date();
+    }
+
+    public Compte(Long compteId, User user, Long accountNumber, Double balance) {
+        this.user = user;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+        this.compteId = compteId;
+        this.creationDate = new Date();
+    }
+
+    public Compte(User user) {
+        this.user = user;
+        this.creationDate = new Date();
+    }
+
+    /*public Compte(Long compteId, Long accountNumber, Double balance, User user, Date creationDate ) {
         super();
         this.compteId=getCompteId();
         this.accountNumber=getAccountNumber();
@@ -36,4 +60,6 @@ public abstract class Compte implements Serializable {
         this.user = user;
         this.creationDate = new Date();
     }
+
+     */
 }
