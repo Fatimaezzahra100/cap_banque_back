@@ -7,6 +7,7 @@ import net.bytebuddy.utility.RandomString;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Locale;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -29,14 +30,18 @@ public class Rib implements Serializable {
 
     public String generateIban(){
         String iban = "FR";
-        RandomString gen = new RandomString(2, ThreadLocalRandom.current());
+        Random r = new Random();
+        char c1 = (char) (r.nextInt(26) + 'a');
+        char c2 = (char) (r.nextInt(26) + 'a');
+        String gen = (String.valueOf(c1))+(String.valueOf(c2));
+
         String chiffres = "";
         for(int i=0; i<23; i++){
-            int chiffre = (int) Math.random();
+            int chiffre = 0 + (int)(Math.random() * ((9 - 0) + 1));
             chiffres += String.valueOf(chiffre);
         }
 
-        iban += gen + chiffres;
+        iban += gen.toUpperCase() + chiffres;
         return iban;
 
     }
