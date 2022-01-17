@@ -17,10 +17,10 @@ import javax.persistence.ManyToOne;
 public class OperationExterne extends Operation{
 
     @ManyToOne
-    @JoinColumn(name ="compte_receiver_id")
+    @JoinColumn(name ="ribReceiverId")
     private Rib ribReceiver;
 
-    public OperationExterne(Long amount, Compte compteSender, Frequence frequence, Rib ribReceiver) {
+    public OperationExterne(Long amount, Long compteSender, Frequence frequence, Rib ribReceiver) {
         super(amount, compteSender, frequence);
         this.ribReceiver = ribReceiver;
     }

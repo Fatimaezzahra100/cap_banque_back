@@ -137,9 +137,9 @@ public class bankController {
     }
 
     @GetMapping("users/{id}/cc")
-    public ResponseEntity<CompteCourant> getUserCC(@PathVariable("id") Long id) {
-        CompteCourant compte = userService.getUserCC(id);
-        return new ResponseEntity<CompteCourant>(compte, HttpStatus.OK);
+    public ResponseEntity<Compte> getUserCC(@PathVariable("id") Long id) {
+        Compte compte = userService.getUserCC(id);
+        return new ResponseEntity<Compte>(compte, HttpStatus.OK);
     }
 
     @GetMapping("users/{id}/ce")
@@ -157,19 +157,19 @@ public class bankController {
     @PostMapping("users/{id}/add/ce")
     public ResponseEntity<?> addUserCE(@PathVariable("id") Long id, @RequestBody CompteEpargne compte) {
        userService.addUserCE(compte, id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("users/{id}/add/opIn")
     public ResponseEntity<?> addUserOpIn(@PathVariable("id") Long id, @RequestBody OperationInterne operation) {
         userService.addUserOpIn(operation, id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     @PostMapping("users/{id}/add/opEx")
     public ResponseEntity<?> addUserOpEx(@PathVariable("id") Long id, @RequestBody OperationExterne operation) {
         userService.addUserOpEx(operation, id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
 
