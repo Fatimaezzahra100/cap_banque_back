@@ -22,29 +22,28 @@ public class bankController {
     OperationService operationService;
 
     @GetMapping("/operations/all")
-    public ResponseEntity<List<Operation>> getOperations(){
+    public ResponseEntity<List<Operation>> getOperations() {
         List<Operation> operations = operationService.getOperations();
         return new ResponseEntity<>(operations, HttpStatus.OK);
     }
 
     @GetMapping("/operations/{id}")
-    public ResponseEntity<Operation> getOperation(@PathVariable("id") Long id){
+    public ResponseEntity<Operation> getOperation(@PathVariable("id") Long id) {
         Operation operation = operationService.getOperation(id);
         return new ResponseEntity<>(operation, HttpStatus.OK);
     }
 
     @PostMapping("/operations/new/interne")
-    public ResponseEntity<Operation> createVirementInterne(@RequestBody OperationInterne operation){
+    public ResponseEntity<Operation> createVirementInterne(@RequestBody OperationInterne operation) {
         Operation operationCreated = operationService.virementInterne(operation);
         return new ResponseEntity<>(operationCreated, HttpStatus.CREATED);
     }
 
     @PostMapping("/operations/new/externe")
-    public ResponseEntity<Operation> createVirementExterne(@RequestBody OperationExterne operation){
+    public ResponseEntity<Operation> createVirementExterne(@RequestBody OperationExterne operation) {
         Operation operationCreated = operationService.virementExterne(operation);
         return new ResponseEntity<>(operationCreated, HttpStatus.CREATED);
     }
-
 
 
     // COMPTES
@@ -103,7 +102,7 @@ public class bankController {
     UserService userService;
 
     @PostMapping("users/save")
-    public ResponseEntity<User> addNewUser (@RequestBody User user) {
+    public ResponseEntity<User> addNewUser(@RequestBody User user) {
         User user1 = userService.saveUser(user);
         return new ResponseEntity<>(user1, HttpStatus.CREATED);
     }
@@ -156,7 +155,7 @@ public class bankController {
 
     @PostMapping("users/{id}/add/ce")
     public ResponseEntity<?> addUserCE(@PathVariable("id") Long id, @RequestBody CompteEpargne compte) {
-       userService.addUserCE(compte, id);
+        userService.addUserCE(compte, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
@@ -171,8 +170,6 @@ public class bankController {
         userService.addUserOpEx(operation, id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
-
 
 
 }
