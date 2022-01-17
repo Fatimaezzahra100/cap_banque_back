@@ -4,8 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.DiscriminatorValue;
-import javax.persistence.Entity;
+import javax.persistence.*;
 import java.util.Date;
 
 @Entity
@@ -13,17 +12,18 @@ import java.util.Date;
 @DiscriminatorValue("CC")
 public class CompteCourant extends Compte{
     private Double overdraft;
+    @OneToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 
     public CompteCourant(User user) {
-        super(user);
+        super();
+        this.user = user;
+        this.overdraft = 0.0;
         this.setBalance(500.0);
     }
 
-    public CompteCourant (Long compteId, Long accountNumber, Double balance, User user, Date creationDate ) {
-        super(compteId,user,accountNumber,balance);
-        this.setBalance(500.0);
 
-    }
 
 
 }

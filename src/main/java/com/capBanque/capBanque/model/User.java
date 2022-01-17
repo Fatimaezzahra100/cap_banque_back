@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.List;
 
 @Entity
 @Data @AllArgsConstructor @NoArgsConstructor
@@ -21,7 +22,10 @@ public class User implements Serializable {
     private String address;
 
     @OneToMany(mappedBy = "user")
-    private Collection<Compte> comptes;
+    private List<CompteEpargne> comptesEpargne;
+
+    @OneToOne(mappedBy = "user")
+    private CompteCourant compteCourant;
 
     @OneToOne(mappedBy = "user")
     @JoinColumn(name="RIB_id")
@@ -30,7 +34,7 @@ public class User implements Serializable {
     private Long tel;
 
     @OneToMany(mappedBy="compteSender")
-    private Collection<Operation> operations;
+    private List<Operation> operations;
 
     public User(String userName, String lastName, String firstName, String email, String address, Long tel) {
         this.userName = userName;
@@ -39,5 +43,6 @@ public class User implements Serializable {
         this.email = email;
         this.address = address;
         this.tel = tel;
+        this.compteCourant = new CompteCourant(this);
     }
 }

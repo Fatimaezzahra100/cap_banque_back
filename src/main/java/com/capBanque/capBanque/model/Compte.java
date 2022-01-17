@@ -19,20 +19,13 @@ public abstract class Compte implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long compteId;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
+
     private Long accountNumber;
     private Double balance;
     private Date creationDate;
 
-    public Compte(User user, Long accountNumber, Double balance) {
-        this.user = user;
-        this.accountNumber = accountNumber;
-        this.balance = balance;
-        this.creationDate = new Date();
-    }
 
+ /*
     public Compte(Long compteId, User user, Long accountNumber, Double balance) {
         this.user = user;
         this.accountNumber = accountNumber;
@@ -46,7 +39,7 @@ public abstract class Compte implements Serializable {
         this.creationDate = new Date();
     }
 
-    /*public Compte(Long compteId, Long accountNumber, Double balance, User user, Date creationDate ) {
+   public Compte(Long compteId, Long accountNumber, Double balance, User user, Date creationDate ) {
         super();
         this.compteId=getCompteId();
         this.accountNumber=getAccountNumber();
