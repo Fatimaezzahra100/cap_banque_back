@@ -10,7 +10,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @AllArgsConstructor
 public class User implements Serializable {
     @Id
     @GeneratedValue (strategy = GenerationType.IDENTITY)
@@ -21,19 +21,12 @@ public class User implements Serializable {
     private String email;
     private String address;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany
     private List<CompteEpargne> comptesEpargne;
-
-    @OneToOne(mappedBy = "user")
-    private CompteCourant compteCourant;
-
-    @OneToOne(mappedBy = "user")
-    @JoinColumn(name="RIB_id")
-    private Rib rib;
-
+    private Long compteCourantId;
+    private Long ribId;
     private Long tel;
-
-    @OneToMany(mappedBy="compteSender")
+    @OneToMany
     private List<Operation> operations;
 
     public User(String userName, String lastName, String firstName, String email, String address, Long tel) {
@@ -43,6 +36,16 @@ public class User implements Serializable {
         this.email = email;
         this.address = address;
         this.tel = tel;
-        this.compteCourant = new CompteCourant(this);
+        CompteCourant compteCourant = new CompteCourant(this.userId);
+        this.compteCourantId = compteCourant.getCompteId();
+        Rib rib = new Rib(this.userId);
+        this.ribId = rib.getRibId();
+    }
+
+    public User(){
+        CompteCourant compteCourant = new CompteCourant(this.userId);
+        this.compteCourantId = compteCourant.getCompteId();
+        Rib rib = new Rib(this.userId);
+        this.ribId = rib.getRibId();
     }
 }

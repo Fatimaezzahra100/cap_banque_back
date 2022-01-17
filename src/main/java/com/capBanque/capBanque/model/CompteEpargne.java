@@ -16,13 +16,12 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("CE")
 public class CompteEpargne extends Compte{
     private Double rate;
-    @ManyToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
-    public CompteEpargne(User user, Double rate) {
+    private Long userId;
+
+    public CompteEpargne(Long userId, Double rate) {
         super();
-        this.user = user;
+        this.userId = userId;
         this.rate = rate;
     }
 }

@@ -1,6 +1,9 @@
 package com.capBanque.capBanque.service;
 import com.capBanque.capBanque.exeption.UserNotFoundException;
 import com.capBanque.capBanque.model.*;
+import com.capBanque.capBanque.repository.CompteRepository;
+import com.capBanque.capBanque.repository.OperationRepository;
+import com.capBanque.capBanque.repository.RibRepository;
 import com.capBanque.capBanque.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,8 +18,20 @@ public class UserService {
     private UserRepository userRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository) {
+    private CompteRepository compteRepository;
+
+    @Autowired
+    private OperationRepository operationRepository;
+
+    @Autowired
+    private RibRepository ribRepository;
+
+    @Autowired
+    public UserService(UserRepository userRepository, CompteRepository compteRepository, OperationRepository operationRepository, RibRepository ribRepository) {
         this.userRepository = userRepository;
+        this.compteRepository = compteRepository;
+        this.operationRepository = operationRepository;
+        this.ribRepository = ribRepository;
     }
 
     public User findUserById(Long id) {
@@ -48,12 +63,24 @@ public class UserService {
     }
 
     public User saveUser(User user) {
+        userRepository.save(user);
+        CompteCourant compteCourant = new CompteCourant(user.getUserId());
+        compteRepository.save(compteCourant);
+
+        Rib rib = new Rib(user.getUserId());
+        ribRepository.save(rib);
+
+        user.setCompteCourantId(compteCourant.getCompteId());
+        user.setRibId(rib.getRibId());
         return userRepository.save(user);
+
     }
 
-    public CompteCourant getUserCC(Long user_id){
+    public Compte getUserCC(Long user_id){
         User user = findUserById(user_id);
-        return user.getCompteCourant();
+        Long ccId =  user.getCompteCourantId();
+        return compteRepository.findById(ccId).orElseThrow(() -> new UserNotFoundException(
+                "Account by id" + ccId + "was not found"));
     }
 
     public List<CompteEpargne> getUserCEs(Long user_id){
@@ -66,25 +93,47 @@ public class UserService {
         return user.getOperations();
     }
 
-    public void addUserCE(CompteEpargne compteEpargne, Long user_id){
+    public User addUserCE(CompteEpargne compteEpargne, Long user_id){
+
+        compteEpargne.setUserId(user_id);
+        compteRepository.save(compteEpargne);
+
         User user = findUserById(user_id);
         List<CompteEpargne> compteEpargnes = user.getComptesEpargne();
         compteEpargnes.add(compteEpargne);
         user.setComptesEpargne(compteEpargnes);
+        return userRepository.save(user);
+
+
+
     }
 
-    public void addUserOpIn(OperationInterne operation, Long user_id){
+    public User addUserOpIn(OperationInterne operation, Long user_id){
         User user = findUserById(user_id);
+
+        Long compteSenderId = user.getCompteCourantId();
+        operation.setCompteSenderId(compteSenderId);
+        operationRepository.save(operation);
+
+
         List<Operation> operations = user.getOperations();
         operations.add(operation);
         user.setOperations(operations);
+        return userRepository.save(user);
     }
 
-    public void addUserOpEx(OperationExterne operation, Long user_id){
+    public User addUserOpEx(OperationExterne operation, Long user_id){
         User user = findUserById(user_id);
+
+        Long compteSenderId = user.getCompteCourantId();
+        operation.setCompteSenderId(compteSenderId);
+        operationRepository.save(operation);
+
+
         List<Operation> operations = user.getOperations();
         operations.add(operation);
         user.setOperations(operations);
+        return userRepository.save(user);
     }
 
 

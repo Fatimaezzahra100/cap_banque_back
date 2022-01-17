@@ -19,16 +19,15 @@ public abstract class Operation implements Serializable {
     private Long operationId;
     private Long amount;
 
-    @ManyToOne
-    @JoinColumn(name = "compte_sender_id")
-    private Compte compteSender;
 
-    private Date operationDate;
+    private Long compteSenderId;
+
+    private Date operationDate = new Date();
     private Frequence frequence;
 
-    public Operation(Long amount, Compte compteSender, Frequence frequence) {
+    public Operation(Long amount, Long compteSenderId, Frequence frequence) {
         this.amount = amount;
-        this.compteSender = compteSender;
+        this.compteSenderId = compteSenderId;
         this.frequence = frequence;
         this.operationDate = new Date();
     }
