@@ -20,6 +20,6 @@ public abstract class Compte implements Serializable {
     private Long compteId;
     private Long accountNumber;
     private Double balance;
-    private Date creationDate;
+    private Date creationDate = new Date();
 
 }

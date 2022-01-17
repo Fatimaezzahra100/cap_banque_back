@@ -8,17 +8,22 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Data @AllArgsConstructor @NoArgsConstructor
+@Data @AllArgsConstructor
 @DiscriminatorValue("CC")
 public class CompteCourant extends Compte{
     private Double overdraft;
-    @OneToOne
-    @JoinColumn(name = "user_id")
-    private User user;
 
-    public CompteCourant(User user) {
+    private Long userId;
+
+    public CompteCourant(Long userId) {
         super();
-        this.user = user;
+        this.userId = userId;
+        this.overdraft = 0.0;
+        this.setBalance(500.0);
+    }
+
+    public CompteCourant() {
+        super();
         this.overdraft = 0.0;
         this.setBalance(500.0);
     }
