@@ -18,10 +18,7 @@ public abstract class Operation implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long operationId;
     private Long amount;
-
-
     private Long compteSenderId;
-
     private Date operationDate = new Date();
     private Frequence frequence;
 

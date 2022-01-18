@@ -11,8 +11,8 @@ import java.util.Date;
 @Data @AllArgsConstructor
 @DiscriminatorValue("CC")
 public class CompteCourant extends Compte{
-    private Double overdraft;
 
+    private Double overdraft;
     private Long userId;
 
     public CompteCourant(Long userId) {

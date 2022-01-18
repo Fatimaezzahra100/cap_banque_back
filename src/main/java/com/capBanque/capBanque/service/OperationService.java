@@ -16,24 +16,25 @@ import java.util.List;
 public class OperationService {
     @Autowired
     private OperationRepository operationRepository;
+
     @Autowired
     public OperationService(OperationRepository operationRepository) {
         this.operationRepository = operationRepository;
     }
 
-    public Operation virementInterne(OperationInterne operation){
+    public Operation virementInterne(OperationInterne operation) {
         return operationRepository.save(operation);
     }
 
-    public Operation virementExterne(OperationExterne operation){
+    public Operation virementExterne(OperationExterne operation) {
         return operationRepository.save(operation);
     }
 
-    public List<Operation> getOperations(){
+    public List<Operation> getOperations() {
         return operationRepository.findAll();
     }
 
-    public Operation getOperation(Long id){
+    public Operation getOperation(Long id) {
         return operationRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
                 "Operation by id" + id + "was not found"));
     }

@@ -20,6 +20,7 @@ public class User implements Serializable {
     private String firstName;
     private String email;
     private String address;
+    private String password;
 
     @OneToMany
     private List<CompteEpargne> comptesEpargne;

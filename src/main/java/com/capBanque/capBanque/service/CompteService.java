@@ -22,8 +22,7 @@ public class CompteService {
     }
 
     public Compte findCompteById(Long id) {
-        return compteRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
-                "Account by id" + id + "was not found"));
+        return compteRepository.findById(id).orElseThrow(() -> new UserNotFoundException("Account by id" + id + "was not found"));
     }
 
     public void deleteCompte(Compte compte) {
@@ -45,7 +44,7 @@ public class CompteService {
         return compteRepository.save(compteCourantToUpdate);
     }
 
-    public Compte updateCompteEpargne (CompteEpargne compteCe, Long id) {
+    public Compte updateCompteEpargne(CompteEpargne compteCe, Long id) {
         Compte compteEpargneToUpdate = findCompteById(id);
         compteEpargneToUpdate.setAccountNumber(compteCe.getAccountNumber());
         compteEpargneToUpdate.setBalance(compteCe.getBalance());

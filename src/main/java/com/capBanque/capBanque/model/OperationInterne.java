@@ -16,7 +16,6 @@ import javax.persistence.ManyToOne;
 @DiscriminatorValue("IN")
 public class OperationInterne extends Operation{
 
-
     private Long compteReceiverId;
 
     public OperationInterne(Long amount, Long compteSenderId, Frequence frequence, Long compteReceiverId) {
