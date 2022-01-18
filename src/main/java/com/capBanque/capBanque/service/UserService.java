@@ -98,6 +98,19 @@ public class UserService {
         return user.getOperations();
     }
 
+    public Rib getUserRib(Long user_id){
+        User user = findUserById(user_id);
+        Long rib_id = user.getRibId();
+        return ribRepository.findById(rib_id).orElseThrow(() -> new UserNotFoundException(
+                "Rib by id" + rib_id + "was not found"));
+
+    }
+
+    public User getUserByRib(Rib rib){
+        Long userId = rib.getUserId();
+        return findUserById(userId);
+    }
+
     public User addUserCE(CompteEpargne compteEpargne, Long user_id){
 
         compteEpargne.setUserId(user_id);
@@ -145,12 +158,8 @@ public class UserService {
     }
 
 
-    /*
-    //TODO:
-    public Rib getUserRib(Long userId){}
-    public User getUserByRib(Rib rib){}
 
-    */
+
 
 
 
