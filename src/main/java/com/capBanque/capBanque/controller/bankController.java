@@ -154,6 +154,18 @@ public class bankController {
         return new ResponseEntity<List<Operation>>(operations, HttpStatus.OK);
     }
 
+    @GetMapping("users/{id}/rib")
+    public ResponseEntity<Rib> getUserRib(@PathVariable("id") Long id) {
+        Rib rib = userService.getUserRib(id);
+        return new ResponseEntity<Rib>(rib, HttpStatus.OK);
+    }
+
+    @GetMapping("users/getByRib")
+    public ResponseEntity<User> getUserByRib(@RequestBody Rib rib) {
+        User user  = userService.getUserByRib(rib);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
+    }
+
     @PostMapping("users/{id}/add/ce")
     public ResponseEntity<?> addUserCE(@PathVariable("id") Long id, @RequestBody CompteEpargne compte) {
        userService.addUserCE(compte, id);

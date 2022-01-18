@@ -19,7 +19,7 @@ public abstract class Compte implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long compteId;
     private Long accountNumber;
-    private Double balance;
+    private Double balance = 0.0;
     private Date creationDate = new Date();
 
 }
