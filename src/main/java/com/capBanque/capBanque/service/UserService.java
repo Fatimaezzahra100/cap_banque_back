@@ -1,5 +1,6 @@
 package com.capBanque.capBanque.service;
 import com.capBanque.capBanque.exeption.UserNotFoundException;
+import com.capBanque.capBanque.metier.BanqueMetierImplementation;
 import com.capBanque.capBanque.model.*;
 import com.capBanque.capBanque.repository.CompteRepository;
 import com.capBanque.capBanque.repository.OperationRepository;
@@ -27,11 +28,15 @@ public class UserService {
     private RibRepository ribRepository;
 
     @Autowired
-    public UserService(UserRepository userRepository, CompteRepository compteRepository, OperationRepository operationRepository, RibRepository ribRepository) {
+    private BanqueMetierImplementation banque;
+
+    @Autowired
+    public UserService(UserRepository userRepository, CompteRepository compteRepository, OperationRepository operationRepository, RibRepository ribRepository, BanqueMetierImplementation banque) {
         this.userRepository = userRepository;
         this.compteRepository = compteRepository;
         this.operationRepository = operationRepository;
         this.ribRepository = ribRepository;
+        this.banque = banque;
     }
 
     public User findUserById(Long id) {
@@ -96,6 +101,7 @@ public class UserService {
     public User addUserCE(CompteEpargne compteEpargne, Long user_id){
 
         compteEpargne.setUserId(user_id);
+        compteEpargne.setBalance(0.0);
         compteRepository.save(compteEpargne);
 
         User user = findUserById(user_id);
@@ -111,11 +117,11 @@ public class UserService {
     public User addUserOpIn(OperationInterne operation, Long user_id){
         User user = findUserById(user_id);
 
-        Long compteSenderId = user.getCompteCourantId();
-        operation.setCompteSenderId(compteSenderId);
+        //mise à jour des soldes de l'opération
+        banque.virement(operation.getCompteSenderId(), operation.getCompteReceiverId(), operation.getAmount());
         operationRepository.save(operation);
 
-
+        //mise à jour de la liste d'operations du user
         List<Operation> operations = user.getOperations();
         operations.add(operation);
         user.setOperations(operations);
@@ -125,17 +131,26 @@ public class UserService {
     public User addUserOpEx(OperationExterne operation, Long user_id){
         User user = findUserById(user_id);
 
-        Long compteSenderId = user.getCompteCourantId();
-        operation.setCompteSenderId(compteSenderId);
+        //mise à jour des soldes de l'opération
+        Long userReceiverId = operation.getRibReceiver().getUserId();
+        Long compteReceiverId = findUserById(userReceiverId).getCompteCourantId(); //compte courant du user possédant le ribRceuver
+        banque.virement(operation.getCompteSenderId(), compteReceiverId, operation.getAmount());
         operationRepository.save(operation);
 
-
+        //mise à jour de la liste d'operations du user
         List<Operation> operations = user.getOperations();
         operations.add(operation);
         user.setOperations(operations);
         return userRepository.save(user);
     }
 
+
+    /*
+    //TODO:
+    public Rib getUserRib(Long userId){}
+    public User getUserByRib(Rib rib){}
+
+    */
 
 
 
