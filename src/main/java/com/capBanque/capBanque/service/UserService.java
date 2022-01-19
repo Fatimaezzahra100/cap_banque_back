@@ -31,12 +31,16 @@ public class UserService {
     private BanqueMetierImplementation banque;
 
     @Autowired
-    public UserService(UserRepository userRepository, CompteRepository compteRepository, OperationRepository operationRepository, RibRepository ribRepository, BanqueMetierImplementation banque) {
+    private OperationService operationService;
+
+    @Autowired
+    public UserService(UserRepository userRepository, CompteRepository compteRepository, OperationRepository operationRepository, RibRepository ribRepository, BanqueMetierImplementation banque, OperationService operationService) {
         this.userRepository = userRepository;
         this.compteRepository = compteRepository;
         this.operationRepository = operationRepository;
         this.ribRepository = ribRepository;
         this.banque = banque;
+        this.operationService = operationService;
     }
 
     public User findUserById(Long id) {
@@ -133,11 +137,18 @@ public class UserService {
         //mise à jour des soldes de l'opération
         banque.virement(operation.getCompteSenderId(), operation.getCompteReceiverId(), operation.getAmount());
         operationRepository.save(operation);
+        //mise à jour des string sender et receiver
+        User sender = getSenderByOperationId(operation.getOperationId());
+        operation.setUserSender(sender.getFirstName()+" "+sender.getLastName());
+        User receiver = getReceiverByOperationId(operation.getOperationId());
+        operation.setUserReceiver(receiver.getFirstName()+" "+receiver.getLastName());
+        operationRepository.save(operation);
 
-        //mise à jour de la liste d'operations du user
+        //mise à jour de la liste d'operations du user sender
         List<Operation> operations = user.getOperations();
         operations.add(operation);
         user.setOperations(operations);
+
         return userRepository.save(user);
     }
 
@@ -149,12 +160,60 @@ public class UserService {
         Long compteReceiverId = findUserById(userReceiverId).getCompteCourantId(); //compte courant du user possédant le ribRceuver
         banque.virement(operation.getCompteSenderId(), compteReceiverId, operation.getAmount());
         operationRepository.save(operation);
+        //mise à jour des string sender et receiver
+        User sender = getSenderByOperationId(operation.getOperationId());
+        operation.setUserSender(sender.getFirstName()+" "+sender.getLastName());
+        User receiver = getReceiverByOperationId(operation.getOperationId());
+        operation.setUserReceiver(receiver.getFirstName()+" "+receiver.getLastName());
+        operationRepository.save(operation);
 
-        //mise à jour de la liste d'operations du user
+        //mise à jour de la liste d'operations du user sender
         List<Operation> operations = user.getOperations();
         operations.add(operation);
         user.setOperations(operations);
+        // mise à jour de la liste d'operations du user receiver
+        User userReceiver = findUserById(userReceiverId);
+        List<Operation> operationsReceiver = userReceiver.getOperations();
+        operationsReceiver.add(operation);
+        userReceiver.setOperations(operationsReceiver);
+        userRepository.save(userReceiver);
         return userRepository.save(user);
+    }
+
+
+
+    public User getSenderByOperationId(Long opId){
+        Operation op = operationRepository.getById(opId);
+        Long compteSenderId = op.getCompteSenderId();
+        Compte compte =  compteRepository.findById(compteSenderId).orElseThrow(() -> new UserNotFoundException(
+                "Account was not found"));
+        Long userId =  compte.getUserId();
+        return findUserById(userId);
+
+    }
+
+    public User getReceiverByOperationId(Long opId){
+
+        Operation op = operationService.getOperation(opId);
+        if(op instanceof OperationExterne){
+            Rib ribReceiver = ((OperationExterne) op).getRibReceiver();
+            return getUserByRib(ribReceiver);
+
+        } else if(op instanceof OperationInterne){
+            System.out.print("op interne");
+            Long compteReceiverId = ((OperationInterne) op).getCompteReceiverId();
+            Compte compte =  compteRepository.findById(compteReceiverId).orElseThrow(() -> new UserNotFoundException(
+                    "Account was not found"));
+            Long userId =  compte.getUserId();
+            return findUserById(userId);
+
+        } else {
+            System.out.print("type not found");
+            return null;
+        }
+
+
+
     }
 
 

@@ -4,6 +4,7 @@ import com.capBanque.capBanque.exeption.UserNotFoundException;
 import com.capBanque.capBanque.model.Operation;
 import com.capBanque.capBanque.model.OperationExterne;
 import com.capBanque.capBanque.model.OperationInterne;
+import com.capBanque.capBanque.model.User;
 import com.capBanque.capBanque.repository.CompteRepository;
 import com.capBanque.capBanque.repository.OperationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import java.util.List;
 public class OperationService {
     @Autowired
     private OperationRepository operationRepository;
+
 
     @Autowired
     public OperationService(OperationRepository operationRepository) {
@@ -38,5 +40,8 @@ public class OperationService {
         return operationRepository.findById(id).orElseThrow(() -> new UserNotFoundException(
                 "Operation by id" + id + "was not found"));
     }
+
+
+
 
 }

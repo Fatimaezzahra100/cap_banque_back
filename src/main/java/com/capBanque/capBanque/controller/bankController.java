@@ -21,6 +21,7 @@ public class bankController {
     @Autowired
     OperationService operationService;
 
+
     @GetMapping("/operations/all")
     public ResponseEntity<List<Operation>> getOperations(){
         List<Operation> operations = operationService.getOperations();
@@ -182,6 +183,18 @@ public class bankController {
     public ResponseEntity<?> addUserOpEx(@PathVariable("id") Long id, @RequestBody OperationExterne operation) {
         userService.addUserOpEx(operation, id);
         return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+    @GetMapping("/operations/{opId}/sender")
+    public ResponseEntity<User> getSenderByOperationId(@PathVariable Long opId){
+        User sender = userService.getSenderByOperationId(opId);
+        return new ResponseEntity<User>(sender, HttpStatus.OK);
+    }
+
+    @GetMapping("/operations/{opId}/receiver")
+    public ResponseEntity<User> getReceiverByOperationId(@PathVariable Long opId){
+        User receiver = userService.getReceiverByOperationId(opId);
+        return new ResponseEntity<User>(receiver, HttpStatus.OK);
     }
 
 

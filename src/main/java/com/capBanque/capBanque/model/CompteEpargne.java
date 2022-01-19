@@ -11,17 +11,15 @@ import javax.persistence.ManyToOne;
 
 @Entity
 @Data
-@AllArgsConstructor
+
 @NoArgsConstructor
 @DiscriminatorValue("CE")
 public class CompteEpargne extends Compte{
 
     private Double rate;
-    private Long userId;
 
-    public CompteEpargne(Long userId, Double rate) {
+    public CompteEpargne( Double rate) {
         super();
-        this.userId = userId;
         this.rate = rate;
     }
 }

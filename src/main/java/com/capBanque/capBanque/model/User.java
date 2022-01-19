@@ -27,7 +27,7 @@ public class User implements Serializable {
     private Long compteCourantId;
     private Long ribId;
     private Long tel;
-    @OneToMany
+    @ManyToMany
     private List<Operation> operations;
 
     public User(String userName, String lastName, String firstName, String email, String address, Long tel) {

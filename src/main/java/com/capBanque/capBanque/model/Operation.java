@@ -21,6 +21,8 @@ public abstract class Operation implements Serializable {
     private Long compteSenderId;
     private Date operationDate = new Date();
     private Frequence frequence;
+    private String userSender;
+    private String userReceiver;
 
     public Operation(Long amount, Long compteSenderId, Frequence frequence) {
         this.amount = amount;
