@@ -62,12 +62,13 @@ public class UserService {
 
     public User updateUser(User user, Long id) {
         User userToUpdate = findUserById(id);
-        userToUpdate.setUserId(user.getUserId());
+        // userToUpdate.setUserId(userToUpdate.getUserId());
         userToUpdate.setFirstName(user.getFirstName());
         userToUpdate.setUserName(user.getUserName());
         userToUpdate.setAddress(user.getAddress());
         userToUpdate.setEmail(user.getEmail());
         userToUpdate.setTel(user.getTel());
+        userToUpdate.setPassword(user.getPassword());
         return userRepository.save(userToUpdate);
     }
 
